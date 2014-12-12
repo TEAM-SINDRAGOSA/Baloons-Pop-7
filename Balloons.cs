@@ -1,70 +1,69 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading; 
-
-// Edited - corrected spelling mistakes in class and method names
-// Edited - corrected code formatting
-
-//harasva li vi koda? za vruzka s mene v Twitter sym #shisho33   // TODO - Change with a label
-                                                                 // TODO - Add comments if needed
-
-
-namespace BalloonsPops
+﻿namespace BalloonsPops
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading;
+    // Edited - moved "using" statements inside namespace
+    // Edited - corrected spelling mistakes in class and method names
+    // Edited - corrected code formatting
+
+    //harasva li vi koda? za vruzka s mene v Twitter sym #shisho33   // TODO - Change with a label
+    // TODO - Add comments if needed
+    // TODO - Do we need any additional try-catch blocks with errors?
+
 	public class Balloons       
 	{
-		const int rows = 5; //Edited - Wrong names
-		const int columns = 10;
+		const int Rows = 5; //Edited - wrong names
+		const int Columns = 10;
 
-		private static int cells = rows * columns;
+		private static int cells = Rows * Columns;
 		private static int counter = 0;	
         private static int clearedCells = 0;
-        public static string[,] cell = new string[rows, columns];
-		public static StringBuilder input = new StringBuilder();
+        private static string[,] cell = new string[Rows, Columns]; //Edited: changed public classes to private
+		private static StringBuilder input = new StringBuilder();
 		private static SortedDictionary<int, string> statistics = new SortedDictionary<int, string>();
 
-
-        public static void Start()
+        public static void StartGame() // Edited - renamed method
         {
 			Console.WriteLine("Welcome to “Balloons Pops” game. Please try to pop the balloons." 
                                 + "Use 'top' to view the top scoreboard, 'restart' to start a new game and " 
                                 + "'exit' to quit the game."); // Edited - wrapped string
 
-            FillWithRandomBalloons(); // Edited - divided into smaller methods
+            FillWithRandomBalloons(); // Edited - extracted smaller methods
             RenderGraphics();
             GameLogic(input);
         }
 
         private static void FillWithRandomBalloons() // Edited - renamed method
         {
-            cells = rows * columns;
+            cells = Rows * Columns;
             counter = 0;
             clearedCells = 0;
 
-            for (int i = 0; i < rows; i++)
+            for (int r = 0; r < Rows; r++)
             {
-                for (int j = 0; j < columns; j++)
+                for (int c = 0; c < Columns; c++)
                 {
-                    cell[i, j] = RND.GetRandomInt();
+                    cell[r, c] = RND.GetRandomInt();
                 }
             }
         }
 
 
-        private static void RenderGraphics() // TODO - refactor the code, so that the game field columns can be changed
+        private static void RenderGraphics() // TODO - refactor the method, so that the number of Columns in the game field can be changed
         {
             Console.WriteLine("    0 1 2 3 4 5 6 7 8 9");
             Console.WriteLine("   ---------------------");
 
-            for (int i = 0; i < rows; i++)
+            for (int r = 0; r < Rows; r++)
             {
-                Console.Write(i + " | ");
+                Console.Write(r + " | ");
 
-                for (int j = 0; j < columns; j++)
+                for (int c = 0; c < Columns; c++)
                 {
-                    Console.Write(cell[i, j] + " ");
+                    Console.Write(cell[r, c] + " ");
                 }
                 Console.Write("| ");
                 Console.WriteLine();
@@ -82,10 +81,16 @@ namespace BalloonsPops
 		}
 
 
-		private static bool IsLegalMove(int i, int j)
+		private static bool IsLegalMove(int r, int c)
 		{
-			if ((i < 0) || (j < 0) || (j > columns - 1) || (i > rows - 1)) return false;
-			else return (cell[i, j] != ".");
+            if ((r < 0) || (c < 0) || (c > Columns - 1) || (r > Rows - 1))
+            {
+                return false;
+            }
+            else
+            {
+                return (cell[r, c] != ".");
+            }
 		}
 
 
@@ -99,7 +104,7 @@ namespace BalloonsPops
 
         private static void IllegalMoveHandler() // Edited - changed method name
 		{
-			Console.WriteLine("Illegal move: cannot pop missing ballon!");
+			Console.WriteLine("Illegal move: cannot pop missing balloon!");
 			input.Clear();
 			GameLogic(input);
 		}
@@ -131,7 +136,7 @@ namespace BalloonsPops
 				statistics.Add(counter, username);
 				ShowStatistics();
 				input.Clear();
-				Start();
+				StartGame();
 			}
 		}
 
@@ -153,8 +158,8 @@ namespace BalloonsPops
 
         private static void PlayGame()
         {
-			int i = -1;
-			int j = -1;
+			int r = -1;
+			int c = -1;
 
 			Play : ReadTheIput();
 
@@ -163,7 +168,7 @@ namespace BalloonsPops
             // TODO - Replace with a switch
 			if (input.ToString() == "") InvalidInputHandler();
 			if (input.ToString() == "top") { ShowStatistics(); input.Clear(); goto Play; }
-            if (input.ToString() == "restart") { input.Clear(); Start(); }
+            if (input.ToString() == "restart") { input.Clear(); StartGame(); }
 			if (input.ToString() == "exit") Exit();
 
 			string activeCell;
@@ -171,18 +176,18 @@ namespace BalloonsPops
 
 			try
 			{
-				i = Int32.Parse(input.ToString()) / 10;
-				j = Int32.Parse(input.ToString()) % 10;
+				r = Int32.Parse(input.ToString()) / 10;
+				c = Int32.Parse(input.ToString()) % 10;
 			}
 			catch(Exception) 
 			{
 				InvalidInputHandler();
 			}
 
-            if (IsLegalMove(i, j))
+            if (IsLegalMove(r, c))
             {
-                activeCell = cell[i, j];
-                Clear(i, j, activeCell);
+                activeCell = cell[r, c];
+                Clear(r, c, activeCell);
             }
             else
             {
@@ -193,20 +198,20 @@ namespace BalloonsPops
             RenderGraphics();
         }
 
-		private static void Clear(int i, int j, string activeCell)
+		private static void Clear(int r, int c, string activeCell)
 		{
-			if ((i >= 0) && (i <= rows-1) && (j <= columns-1) && (j >= 0) && (cell[i, j] == activeCell)) // Edited - removed magic numbers
+			if ((r >= 0) && (r <= Rows-1) && (c <= Columns-1) && (c >= 0) && (cell[r, c] == activeCell)) // Edited - removed magic numbers
 			{
-				cell[i, j] = ".";
+				cell[r, c] = ".";
 				clearedCells++;
 				//Up
-				Clear(i-1, j, activeCell);
+				Clear(r-1, c, activeCell);
 				//Down
-				Clear(i + 1, j, activeCell);
+				Clear(r + 1, c, activeCell);
 				//Left
-				Clear(i, j + 1, activeCell);
+				Clear(r, c + 1, activeCell);
 				//Right
-				Clear(i, j - 1, activeCell);
+				Clear(r, c - 1, activeCell);
 			}
 			else
 			{
@@ -218,27 +223,27 @@ namespace BalloonsPops
 
 		private static void MoveBalloons() // Edited - renamed method
 		{
-			int i; 
-			int j;
+			int r; 
+			int c;
 			Queue<string> temp = new Queue<string>();
 
-			for (j = columns-1; j >= 0; j--)
+			for (c = Columns-1; c >= 0; c--)
 			{
-				for (i = rows-1; i >= 0; i--)
+				for (r = Rows-1; r >= 0; r--)
 				{
-					if (cell[i, j] != ".")
+					if (cell[r, c] != ".")
 					{
-						temp.Enqueue(cell[i, j]);
-						cell[i, j] = ".";
+						temp.Enqueue(cell[r, c]);
+						cell[r, c] = ".";
 					}
 				}
 
-				i = rows-1; // Edited - removed magic number
+				r = Rows-1; // Edited - removed magic number
 
 				while (temp.Count > 0)
 				{
-					cell[i, j] = temp.Dequeue();
-					i--;
+					cell[r, c] = temp.Dequeue();
+					r--;
 				}
 
 				temp.Clear();
@@ -249,21 +254,25 @@ namespace BalloonsPops
 		{
 			return (cells == 0);
 		}
+
+
+        static void Main() // Edited - removed class
+        {
+            Balloons.StartGame();
+        }  
 	}
 
 
-    public static class RND
+    public static class RND // TODO - Do we need this class? If we do, it should be in a separate file.
     {
-        static Random r = new Random();
+        static Random rand = new Random();
 
         public static string GetRandomInt()
         {
             string legalChars = "1234";
-            string builder = null;
-            builder = legalChars[r.Next(0, legalChars.Length)].ToString();
-            return builder;
+            string randomNumber = null;
+            randomNumber = legalChars[rand.Next(0, legalChars.Length)].ToString();
+            return randomNumber;
         }
     }
-
-    // Edited - removed class into separate file
 }
