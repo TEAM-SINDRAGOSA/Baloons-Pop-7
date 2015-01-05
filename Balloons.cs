@@ -1,4 +1,4 @@
-﻿namespace BalloonsPops
+﻿namespace BalloonsPop
 {
     using System;
     using System.Collections.Generic;
@@ -9,21 +9,21 @@
     // Edited - corrected spelling mistakes in class and method names
     // Edited - corrected code formatting
 
-    //harasva li vi koda? za vruzka s mene v Twitter sym #shisho33   // TODO - Change with a label
-    // TODO - Add comments if needed
-    // TODO - Do we need any additional try-catch blocks with errors?
+    [Author("shisho33")] // Edited - applied attribute, instead of comment
+        
+        // TODO - Add docuemntation
 
 	public class Balloons       
 	{
-		const int Rows = 5; //Edited - wrong names
-		const int Columns = 10;
+		public const int Rows = 5; //Edited - wrong names
+		public const int Columns = 15;
 
-		private static int cells = Rows * Columns;
+		private static int remainingCells = Rows * Columns;
 		private static int counter = 0;	
         private static int clearedCells = 0;
-        private static string[,] cell = new string[Rows, Columns]; //Edited: changed public classes to private
+        public static string[,] cell = new string[Rows, Columns]; //Edited: changed public classes to internal
 		private static StringBuilder input = new StringBuilder();
-		private static SortedDictionary<int, string> statistics = new SortedDictionary<int, string>();
+		
 
         public static void StartGame() // Edited - renamed method
         {
@@ -31,31 +31,40 @@
                                 + "Use 'top' to view the top scoreboard, 'restart' to start a new game and " 
                                 + "'exit' to quit the game."); // Edited - wrapped string
 
+            remainingCells = Rows * Columns; // Moved here from irrelevant method
+            counter = 0; // Moved here from irrelevant method
+            clearedCells = 0; // Moved here from irrelevant method
+
             FillWithRandomBalloons(); // Edited - extracted smaller methods
             RenderGraphics();
             GameLogic(input);
         }
 
-        private static void FillWithRandomBalloons() // Edited - renamed method
+        internal static void FillWithRandomBalloons() // Edited - renamed method
         {
-            cells = Rows * Columns;
-            counter = 0;
-            clearedCells = 0;
-
             for (int r = 0; r < Rows; r++)
             {
                 for (int c = 0; c < Columns; c++)
                 {
-                    cell[r, c] = RND.GetRandomInt();
+                    cell[r, c] = RND.GetRandomChar();
                 }
             }
         }
 
 
-        private static void RenderGraphics() // TODO - refactor the method, so that the number of Columns in the game field can be changed
+        private static void RenderGraphics() // Edited - refactored the method, so that the number of Columns in the game field can be changed
         {
-            Console.WriteLine("    0 1 2 3 4 5 6 7 8 9");
-            Console.WriteLine("   ---------------------");
+            int[] columnsNumbers = new int[Columns];
+
+            for (int i = 0; i < columnsNumbers.Length; i++)
+            {
+                columnsNumbers[i] = i+1;
+            }
+
+            string columnsNumbersString = "    " + string.Join(" ", columnsNumbers);
+            Console.WriteLine(columnsNumbersString);
+
+            PrintDashesLine(columnsNumbersString);
 
             for (int r = 0; r < Rows; r++)
             {
@@ -63,13 +72,32 @@
 
                 for (int c = 0; c < Columns; c++)
                 {
-                    Console.Write(cell[r, c] + " ");
+                    int columnDigits = (int)Math.Floor(Math.Log10(c+1) + 1);
+                    Console.Write(cell[r, c]);
+
+                    for (int i = 0; i < columnDigits; i++)
+                    {
+                        Console.Write(" ");   
+                    }                        
                 }
+
                 Console.Write("| ");
                 Console.WriteLine();
             }
 
-            Console.WriteLine("   ---------------------");
+            PrintDashesLine(columnsNumbersString);
+        }
+
+        private static void PrintDashesLine(string columnsNumbersString)
+        {
+            Console.Write("    ");
+
+            for (int i = 0; i < columnsNumbersString.Length - 4; i++)
+            {
+                Console.Write("-");
+            }
+
+            Console.WriteLine();
         }
        
 		public static void GameLogic(StringBuilder userInput)
@@ -115,9 +143,12 @@
 			Console.WriteLine("Good Bye");
 			Thread.Sleep(1000);
 			Console.WriteLine(counter.ToString());
-			Console.WriteLine(cells.ToString());
+			Console.WriteLine(remainingCells.ToString());
 			Environment.Exit(0);
 		}
+
+        //Edited - moved variable before first method to use it
+        private static IDictionary<int, string> statistics = new SortedDictionary<int, string>(); // Edited: Replaced SortedDictionary with IDicionary
 
 
 		private static void ReadTheIput()
@@ -129,7 +160,7 @@
 			}
 			else
 			{
-				Console.Write("Alriiiiiight! You popped all baloons in "+ counter +" moves."
+				Console.Write("Congratulations! You popped all baloons in "+ counter +" moves."
 								 +"Please enter your name for the top scoreboard:");
 
                 var username = Console.ReadLine(); // Edited - same variable was used for two irrelevant functions. Added new variable.				
@@ -146,13 +177,17 @@
 			Console.WriteLine("Scoreboard:");
 			foreach(KeyValuePair<int, string> s in statistics)
 			{
-				if (p == 4) break; // TODO - Magic number!
+				if (p == 4) break; // TODO - Replace magic number!
 				else
 				{
 					p++;
 					Console.WriteLine("{0}. {1} --> {2} moves",p , s.Value, s.Key);
 				}
 			}
+            if (statistics.Count == 0) // Edited - added info message
+            {
+                Console.WriteLine("No entries yet.");
+            }
 		}
 
 
@@ -215,7 +250,7 @@
 			}
 			else
 			{
-				cells -= clearedCells;
+				remainingCells -= clearedCells;
 				clearedCells = 0;
 				return; 
 			}
@@ -252,7 +287,7 @@
 
 		private static bool IsFinished() 
 		{
-			return (cells == 0);
+			return (remainingCells == 0);
 		}
 
 
@@ -263,16 +298,16 @@
 	}
 
 
-    public static class RND // TODO - Do we need this class? If we do, it should be in a separate file.
+    public static class RND // TODO - Do we need this class or should we put the method in Blaoons class? If we do, it should be in a separate file.
     {
         static Random rand = new Random();
 
-        public static string GetRandomInt()
+        public static string GetRandomChar() // Edited - changed name
         {
             string legalChars = "1234";
-            string randomNumber = null;
-            randomNumber = legalChars[rand.Next(0, legalChars.Length)].ToString();
-            return randomNumber;
+            string randomChar = null;
+            randomChar = legalChars[rand.Next(0, legalChars.Length)].ToString();
+            return randomChar;
         }
     }
 }
