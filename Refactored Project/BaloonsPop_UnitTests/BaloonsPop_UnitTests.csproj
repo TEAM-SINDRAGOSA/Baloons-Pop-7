@@ -54,7 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Refactored Project\Balloons.csproj">
+    <ProjectReference Include="..\Balloons.csproj">
       <Project>{879f0dff-4285-4f45-a9b1-205d1f76f3d9}</Project>
       <Name>Balloons</Name>
     </ProjectReference>

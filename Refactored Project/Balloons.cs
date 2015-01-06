@@ -27,8 +27,7 @@
             Console.WriteLine("Welcome to “Balloons Pops” game. Please try to pop the balloons."
                                 + "Use 'top' to view the top scoreboard, 'restart' to start a new game and "
                                 + "'exit' to quit the game."); // Edited - wrapped string
-
-            remainingCells = Rows * Columns; // Moved here from irrelevant method
+                      
             counter = 0; // Moved here from irrelevant method
             clearedCells = 0; // Moved here from irrelevant method
 
