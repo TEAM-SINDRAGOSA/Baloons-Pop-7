@@ -15,8 +15,8 @@
 
     public class Balloons
     {
-        public const int Rows = 5; //Edited - wrong names
-        public const int Columns = 10;
+        public const int Rows = 0; //Edited - wrong names
+        public const int Columns = 0;
 
         private static int remainingCells = Rows * Columns;
         private static int counter = 0;
@@ -179,7 +179,7 @@
             else
             {
                 Console.Write("Congratulations! You popped all baloons in " + counter + " moves."
-                                 + "Please enter your name for the top scoreboard:");
+                                 + "Please enter your name for the top scoreboard: ");
 
                 var username = Console.ReadLine(); // Edited - same variable was used for two irrelevant functions. Added new variable.				
                 var statisticsEntry = new KeyValuePair<int, string>(counter, username);
