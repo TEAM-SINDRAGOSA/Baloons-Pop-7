@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Balloons", "Balloons.csproj", "{879F0DFF-4285-4F45-A9B1-205D1F76F3D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaloonsPop_UnitTests", "BaloonsPop_UnitTests\BaloonsPop_UnitTests.csproj", "{84E6B80F-564F-4A7C-8D0C-4AFB10288051}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaloonsPop_UnitTests", "..\BaloonsPop_UnitTests\BaloonsPop_UnitTests.csproj", "{84E6B80F-564F-4A7C-8D0C-4AFB10288051}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -15,8 +15,8 @@
 
     public class Balloons
     {
-        public const int Rows = 0; //Edited - wrong names
-        public const int Columns = 0;
+        public const int Rows = 5; //Edited - wrong names
+        public const int Columns = 10;
 
         private static int remainingCells = Rows * Columns;
         private static int counter = 0;
@@ -41,7 +41,7 @@
         }
 
 
-        internal static void FillWithRandomBalloons() // Edited - renamed method
+        public static void FillWithRandomBalloons() // Edited - renamed method
         {
             for (int r = 0; r < Rows; r++)
             {
@@ -178,7 +178,7 @@
             }
             else
             {
-                Console.Write("Congratulations! You popped all baloons in " + counter + " moves."
+                Console.Write("Congratulations! You popped all balloons in " + counter + " moves."
                                  + "Please enter your name for the top scoreboard: ");
 
                 var username = Console.ReadLine(); // Edited - same variable was used for two irrelevant functions. Added new variable.				
