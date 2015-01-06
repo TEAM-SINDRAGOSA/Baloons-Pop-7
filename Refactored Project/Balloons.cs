@@ -3,7 +3,6 @@
     // Edited - moved "using" statements inside namespace
     // Edited - corrected spelling mistakes in class and method names
     // Edited - corrected code formatting
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -11,7 +10,6 @@
     using System.Threading;
 
     [Author("Shishko Shishkov")] // Edited - applied attribute, instead of comment
-
 
     public class Balloons
     {
@@ -23,7 +21,6 @@
         private static int clearedCells = 0;
         public static string[,] cell = new string[Rows, Columns]; //Edited: changed public classes to internal
         private static StringBuilder input = new StringBuilder();
-
 
         public static void StartGame() // Edited - renamed method
         {
@@ -40,7 +37,6 @@
             GameLogic(input);
         }
 
-
         public static void FillWithRandomBalloons() // Edited - renamed method
         {
             for (int r = 0; r < Rows; r++)
@@ -52,7 +48,6 @@
             }
         }
 
-
         static Random rand = new Random();
 
         public static string GetRandomChar() // Edited - changed name
@@ -62,7 +57,6 @@
             randomChar = legalChars[rand.Next(0, legalChars.Length)].ToString();
             return randomChar;
         }
-
 
         private static void RenderGraphics() // Edited - refactored the method to allow changing number of cells in the game field
         {
@@ -105,7 +99,6 @@
             PrintDashesLine(columnsNumbersString);
         }
 
-
         private static void PrintDashesLine(string columnsNumbersString)
         {
             Console.Write("      ");
@@ -117,7 +110,6 @@
             Console.WriteLine();
         }
 
-
         public static void GameLogic(StringBuilder userInput)
         {
             PlayGame();
@@ -125,7 +117,6 @@
             userInput.Clear();
             GameLogic(userInput);
         }
-
 
         private static bool IsLegalMove(int r, int c)
         {
@@ -139,7 +130,6 @@
             }
         }
 
-
         private static void InvalidInputHandler() // Edited - changed method name
         {
             Console.WriteLine("Invalid move or command");
@@ -147,14 +137,12 @@
             GameLogic(input);
         }
 
-
         private static void IllegalMoveHandler() // Edited - changed method name
         {
             Console.WriteLine("Illegal move: cannot pop missing balloon!");
             input.Clear();
             GameLogic(input);
         }
-
 
         private static void Exit()
         {
@@ -164,7 +152,6 @@
             Console.WriteLine("Remaining balloons: " + remainingCells.ToString()); // Edited - added descriptive message for user
             Environment.Exit(0);
         }
-
         // Edited - moved variable before first method to use it
         // Edited: Replaced SortedDictionary with List to allow multiple players with same score in statistics
         private static IList<KeyValuePair<int, string>> statistics = new List<KeyValuePair<int, string>>();
@@ -191,7 +178,6 @@
         }
 
         // Edited - removed unnecessary methods PrintAgain and Restart
-
         private static void ShowStatistics()
         {
             int maxPlayersToShow = 4;
@@ -211,8 +197,7 @@
                 Console.WriteLine("No entries yet.");
             }
         }
-
-
+        
         private static void PlayGame()
         {
             int r = -1;
@@ -279,7 +264,6 @@
             RenderGraphics();
         }
 
-
         private static void Clear(int r, int c, string activeCell)
         {
             if ((r >= 0) && (r <= Rows - 1) && (c <= Columns - 1) && (c >= 0) && (cell[r, c] == activeCell)) // Edited - removed magic numbers
@@ -302,7 +286,6 @@
                 return;
             }
         }
-
 
         private static void MoveBalloons() // Edited - renamed method
         {
@@ -342,6 +325,5 @@
             Balloons.StartGame();
         }
     }
-
     // Edited - removed unnecessary class RND  
 }
