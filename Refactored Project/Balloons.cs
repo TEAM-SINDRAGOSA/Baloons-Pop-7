@@ -204,8 +204,7 @@
             int c = -1;
 
         Play: ReadTheInput();
-            string hop = input.ToString();
-
+            // Edited - removed unnecessary variable
             // Edited - Replaced multiple ifs with a switch
             switch (input.ToString())
             {
@@ -240,15 +239,7 @@
             string activeCell;
             input.Replace(" ", "");
 
-            try
-            {
-                r = Int32.Parse(input.ToString()) / 10;
-                c = Int32.Parse(input.ToString()) % 10;
-            }
-            catch (Exception)
-            {
-                InvalidInputHandler();
-            }
+            TryParseInput(ref r, ref c); // Edited - extracted method
 
             if (IsLegalMove(r, c))
             {
@@ -262,6 +253,19 @@
 
             MoveBalloons();
             RenderGraphics();
+        }
+
+        private static void TryParseInput(ref int r, ref int c)
+        {
+            try
+            {
+                r = Int32.Parse(input.ToString()) / 10;
+                c = Int32.Parse(input.ToString()) % 10;
+            }
+            catch (Exception)
+            {
+                InvalidInputHandler();
+            }
         }
 
         private static void Clear(int r, int c, string activeCell)
