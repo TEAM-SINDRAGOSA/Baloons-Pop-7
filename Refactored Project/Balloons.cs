@@ -148,7 +148,7 @@
         {
             Console.WriteLine("Good Bye");
             Thread.Sleep(1000);
-            Console.WriteLine("Balloons popped: " + counter.ToString());
+            Console.WriteLine("Moves made: " + counter.ToString());
             Console.WriteLine("Remaining balloons: " + remainingCells.ToString()); // Edited - added descriptive message for user
             Environment.Exit(0);
         }
@@ -158,7 +158,7 @@
 
         private static void ReadTheInput()
         {
-            if (!IsFinished())
+            if (remainingCells != 0)
             {
                 Console.Write("Enter a row and column: ");
                 input.Append(Console.ReadLine());
@@ -236,11 +236,9 @@
                     }
             }
 
+            ParseInput(ref r, ref c); // Edited - extracted method
+
             string activeCell;
-            input.Replace(" ", "");
-
-            TryParseInput(ref r, ref c); // Edited - extracted method
-
             if (IsLegalMove(r, c))
             {
                 activeCell = cell[r, c];
@@ -255,8 +253,9 @@
             RenderGraphics();
         }
 
-        private static void TryParseInput(ref int r, ref int c)
+        private static void ParseInput(ref int r, ref int c)
         {
+            input.Replace(" ", "");
             try
             {
                 r = Int32.Parse(input.ToString()) / 10;
@@ -319,10 +318,7 @@
             }
         }
 
-        private static bool IsFinished()
-        {
-            return (remainingCells == 0);
-        }
+        // Edited - removed method IsFInished that does too little
 
         static void Main() // Edited - removed unnecessary class
         {
