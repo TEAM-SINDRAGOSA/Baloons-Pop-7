@@ -11,9 +11,9 @@
                 case GameSize.Small:
                     return new Balloons(4, 8);
                 case GameSize.Medium:
-                    return new Balloons(8, 12);
+                    return new Balloons(6, 10);
                 case GameSize.Large:
-                    return new Balloons(10, 14);                    
+                    return new Balloons(8, 12);                    
                 default:
                     throw new ArgumentException();
             }

@@ -11,12 +11,14 @@
     [TestClass]
     public class Baloons_Tests
     {
+        Balloons testBalloons = BalloonsFactory.SetGameField(GameSize.Small);
+
         [TestMethod]
         public void FillWithRandomBalloonsShouldReturnFilledArray()
         {
-            Balloons.FillWithRandomBalloons();
+            testBalloons.FillWithRandomBalloons();
 
-            Assert.IsNotNull(Balloons.cell[Balloons.Rows-1,Balloons.Columns-1]);
+            Assert.IsNotNull(testBalloons.Cell[testBalloons.Rows - 1, testBalloons.Columns - 1]);
         }
     }
 }
