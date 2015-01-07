@@ -45,6 +45,9 @@
   <ItemGroup>
     <Compile Include="Author.cs" />
     <Compile Include="Balloons.cs" />
+    <Compile Include="BalloonsFactory.cs" />
+    <Compile Include="GameSize.cs" />
+    <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

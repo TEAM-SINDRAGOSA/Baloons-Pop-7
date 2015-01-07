@@ -13,51 +13,60 @@
 
     public class Balloons
     {
-        public const int Rows = 5; //Edited - wrong names
-        public const int Columns = 10;
-
-        private static int remainingCells = Rows * Columns;
         private static int counter = 0;
         private static int clearedCells = 0;
-        public static string[,] cell = new string[Rows, Columns]; //Edited: changed public classes to internal
         private static StringBuilder input = new StringBuilder();
 
-        public static void StartGame() // Edited - renamed method
+        public Balloons(int rows,int columns)
+        {
+            this.Rows = rows;
+            this.Columns = columns;
+            this.RemainingCells = rows * columns;
+            this.Cell = new string[rows, columns];
+        }
+
+        public int Rows { get; set; }
+        public int Columns { get; set; }
+        public int RemainingCells { get; set; }
+        public string[,] Cell { get; set; }
+
+
+        public void StartGame() // Edited - renamed method
         {
             Console.WriteLine("Welcome to “Balloons Pops” game. Please try to pop the balloons."
                                 + "Use 'top' to view the top scoreboard, 'restart' to start a new game and "
                                 + "'exit' to quit the game."); // Edited - wrapped string
-                      
+
             counter = 0; // Moved here from irrelevant method
             clearedCells = 0; // Moved here from irrelevant method
 
             FillWithRandomBalloons(); // Edited - extracted smaller methods
             RenderGraphics();
-            GameLogic(input);
+            GameLogic(input);            
         }
 
-        public static void FillWithRandomBalloons() // Edited - renamed method
+        public void FillWithRandomBalloons() // Edited - renamed method
         {
             for (int r = 0; r < Rows; r++)
             {
                 for (int c = 0; c < Columns; c++)
                 {
-                    cell[r, c] = GetRandomChar();
+                    Cell[r, c] = GetRandomChar();
                 }
             }
         }
 
         static Random rand = new Random();
 
-        public static string GetRandomChar() // Edited - changed name
+        public static string GetRandomChar() // edited - changed name
         {
-            string legalChars = "1234";
-            string randomChar = null;
-            randomChar = legalChars[rand.Next(0, legalChars.Length)].ToString();
-            return randomChar;
+            string legalchars = "1234";
+            string randomchar = null;
+            randomchar = legalchars[rand.Next(0, legalchars.Length)].ToString();
+            return randomchar;
         }
 
-        private static void RenderGraphics() // Edited - refactored the method to allow changing number of cells in the game field
+        private void RenderGraphics() // Edited - refactored the method to allow changing number of cells in the game field
         {
             int[] columnsNumbers = new int[Columns];
             for (int i = 0; i < columnsNumbers.Length; i++)
@@ -84,7 +93,7 @@
                 for (int c = 0; c < Columns; c++)
                 {
                     int columnDigits = (int)Math.Floor(Math.Log10(c + 1) + 1);
-                    Console.Write(cell[r, c]);
+                    Console.Write(Cell[r, c]);
 
                     for (int i = 0; i < columnDigits; i++)
                     {
@@ -98,7 +107,7 @@
             PrintDashesLine(columnsNumbersString);
         }
 
-        private static void PrintDashesLine(string columnsNumbersString)
+        private void PrintDashesLine(string columnsNumbersString)
         {
             Console.Write("      ");
             for (int i = 0; i < columnsNumbersString.Length - 4; i++)
@@ -109,7 +118,7 @@
             Console.WriteLine();
         }
 
-        public static void GameLogic(StringBuilder userInput)
+        public void GameLogic(StringBuilder userInput)
         {
             PlayGame();
             counter++;
@@ -117,7 +126,7 @@
             GameLogic(userInput);
         }
 
-        private static bool IsLegalMove(int r, int c)
+        private bool IsLegalMove(int r, int c)
         {
             if ((r < 0) || (c < 0) || (c > Columns - 1) || (r > Rows - 1))
             {
@@ -125,39 +134,39 @@
             }
             else
             {
-                return (cell[r, c] != ".");
+                return (Cell[r, c] != ".");
             }
         }
 
-        private static void InvalidInputHandler() // Edited - changed method name
+        private void InvalidInputHandler() // Edited - changed method name
         {
             Console.WriteLine("Invalid move or command");
             input.Clear();
             GameLogic(input);
         }
 
-        private static void IllegalMoveHandler() // Edited - changed method name
+        private void IllegalMoveHandler() // Edited - changed method name
         {
             Console.WriteLine("Illegal move: cannot pop missing balloon!");
             input.Clear();
             GameLogic(input);
         }
 
-        private static void Exit()
+        private void Exit()
         {
             Console.WriteLine("Good Bye");
             Thread.Sleep(1000);
             Console.WriteLine("Moves made: " + counter.ToString());
-            Console.WriteLine("Remaining balloons: " + remainingCells.ToString()); // Edited - added descriptive message for user
+            Console.WriteLine("Remaining balloons: " + RemainingCells.ToString()); // Edited - added descriptive message for user
             Environment.Exit(0);
         }
         // Edited - moved variable before first method to use it
         // Edited: Replaced SortedDictionary with List to allow multiple players with same score in statistics
         private static IList<KeyValuePair<int, string>> statistics = new List<KeyValuePair<int, string>>();
 
-        private static void ReadTheInput()
+        private void ReadTheInput()
         {
-            if (remainingCells != 0)
+            if (RemainingCells != 0)
             {
                 Console.Write("Enter a row and column: ");
                 input.Append(Console.ReadLine());
@@ -196,8 +205,8 @@
                 Console.WriteLine("No entries yet.");
             }
         }
-        
-        private static void PlayGame()
+
+        private void PlayGame()
         {
             int r = -1;
             int c = -1;
@@ -234,13 +243,14 @@
                         break;
                     }
             }
+        
 
             ParseInput(ref r, ref c); // Edited - extracted method
 
             string activeCell;
             if (IsLegalMove(r, c))
             {
-                activeCell = cell[r, c];
+                activeCell = Cell[r, c];
                 Clear(r, c, activeCell);
             }
             else
@@ -252,7 +262,7 @@
             RenderGraphics();
         }
 
-        private static void ParseInput(ref int r, ref int c)
+        private void ParseInput(ref int r, ref int c)
         {
             input.Replace(" ", "");
             try
@@ -266,11 +276,11 @@
             }
         }
 
-        private static void Clear(int r, int c, string activeCell)
+        private void Clear(int r, int c, string activeCell)
         {
-            if ((r >= 0) && (r <= Rows - 1) && (c <= Columns - 1) && (c >= 0) && (cell[r, c] == activeCell)) // Edited - removed magic numbers
+            if ((r >= 0) && (r <= Rows - 1) && (c <= Columns - 1) && (c >= 0) && (Cell[r, c] == activeCell)) // Edited - removed magic numbers
             {
-                cell[r, c] = ".";
+                Cell[r, c] = ".";
                 clearedCells++;
                 //Up
                 Clear(r - 1, c, activeCell);
@@ -283,13 +293,13 @@
             }
             else
             {
-                remainingCells -= clearedCells;
+                RemainingCells -= clearedCells;
                 clearedCells = 0;
                 return;
             }
         }
 
-        private static void MoveBalloons() // Edited - renamed method
+        private void MoveBalloons() // Edited - renamed method
         {
             int r;
             int c;
@@ -299,30 +309,22 @@
             {
                 for (r = Rows - 1; r >= 0; r--)
                 {
-                    if (cell[r, c] != ".")
+                    if (Cell[r, c] != ".")
                     {
-                        temp.Enqueue(cell[r, c]);
-                        cell[r, c] = ".";
+                        temp.Enqueue(Cell[r, c]);
+                        Cell[r, c] = ".";
                     }
                 }
 
                 r = Rows - 1; // Edited - removed magic number
                 while (temp.Count > 0)
                 {
-                    cell[r, c] = temp.Dequeue();
+                    Cell[r, c] = temp.Dequeue();
                     r--;
                 }
 
                 temp.Clear();
             }
         }
-
-        // Edited - removed method IsFInished that does too little
-
-        static void Main() // Edited - removed unnecessary class
-        {
-            Balloons.StartGame();
-        }
     }
-    // Edited - removed unnecessary class RND  
 }
