@@ -8,26 +8,22 @@
         {
             Console.WriteLine("Enter game field size: small/medium/large");
             string size = Console.ReadLine();
-            
+            Balloons newGame = BalloonsFactory.SetGameField(GameSize.Small);
 
             switch (size)
             {
                 case "small":
-                    {
-                        Balloons newGame = BalloonsFactory.SetGameField(GameSize.Small);
-                        newGame.StartGame();
+                    {                                            
                         break;
                     }
                 case "medium":
                     {
-                        Balloons newGame = BalloonsFactory.SetGameField(GameSize.Medium);
-                        newGame.StartGame();
+                        newGame = BalloonsFactory.SetGameField(GameSize.Medium);                        
                         break;
                     }
                 case "large":
                     {
-                        Balloons newGame = BalloonsFactory.SetGameField(GameSize.Large);
-                        newGame.StartGame();
+                        newGame = BalloonsFactory.SetGameField(GameSize.Large);                        
                         break;
                     }
                 default:
@@ -37,9 +33,7 @@
                         break;
                     }                          
             }
-
-            
-        }       
-
+            newGame.StartGame();
+        } 
     }
 }
